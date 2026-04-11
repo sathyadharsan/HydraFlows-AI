@@ -1,0 +1,32 @@
+# Node (Frontend)
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+frontend/.env*
+
+# Java (Backend)
+backend/target/
+backend/*.log
+backend/.project
+backend/.classpath
+backend/.settings/
+backend/bin/
+backend/.factorypath
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Other
+.env
+.gemini/
