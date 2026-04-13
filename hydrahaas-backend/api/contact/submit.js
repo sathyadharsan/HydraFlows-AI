@@ -1,3 +1,4 @@
+const db = require('../../db');
 const nodemailer = require('nodemailer');
 
 // ── Email Templates (Plain HTML) ────────────────────────────────
@@ -55,7 +56,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// ── CORS helper ──────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────
 
 function setCORS(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -63,21 +64,8 @@ function setCORS(res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }
 
-module.exports = async (req, res) => {
-  setCORS(res);
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, error: 'Method Not Allowed' });
-  }
-
+async function sendEmails(leadData) {
   try {
-    const leadData = req.body;
-    console.log('[Email Agent] Received request to trigger emails for:', leadData.email);
-
     const adminMailOptions = {
       from: `"HydraFlows System" <${process.env.FROM_EMAIL}>`,
       to: process.env.ADMIN_EMAIL,
@@ -96,10 +84,67 @@ module.exports = async (req, res) => {
       transporter.sendMail(adminMailOptions),
       transporter.sendMail(customerMailOptions)
     ]);
-
-    return res.status(200).json({ success: true, message: 'Emails dispatched successfully' });
+    
+    console.log(`[Contact API] Emails sent successfully for ${leadData.email}`);
   } catch (error) {
-    console.error('[Email Agent] Error dispatching emails:', error);
-    return res.status(500).json({ success: false, error: 'Failed to process email dispatch' });
+    console.error(`[Contact API] Email sending error:`, error.message);
+  }
+}
+
+// ── Main Handler ──────────────────────────────────────────────
+
+module.exports = async (req, res) => {
+  // Step 1: Set CORS
+  setCORS(res);
+
+  // Step 2: Handle OPTIONS
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Step 3: Only allow POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ success: false, error: 'Method Not Allowed' });
+  }
+
+  try {
+    const {
+      name, email, phone, company,
+      industry, scale, requirement, timeline
+    } = req.body;
+
+    if (!name || !email || !phone) {
+      return res.status(400).json({ success: false, error: 'Name, email, phone are required' });
+    }
+
+    console.log(`[Contact API] New lead: ${name} | ${email}`);
+
+    // Save to Supabase PostgreSQL
+    const insertQuery = `
+      INSERT INTO contact_leads 
+        (name, email, phone, company, industry, scale, requirement, timeline)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING id;
+    `;
+    const values = [name, email, phone, company, industry, scale, requirement, timeline];
+    const dbRes = await db.query(insertQuery, values);
+    const newLeadId = dbRes.rows[0].id;
+
+    // Vercel Serverless immediately kills the function when res.status is called.
+    // So we MUST await the email sending before returning the response.
+    await sendEmails(req.body);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Lead saved successfully',
+      id: newLeadId,
+    });
+
+  } catch (error) {
+    console.error(`[Contact API] ERROR:`, error.message);
+    return res.status(500).json({
+      success: false,
+      error: `Server Error: ${error.message}`,
+    });
   }
 };
