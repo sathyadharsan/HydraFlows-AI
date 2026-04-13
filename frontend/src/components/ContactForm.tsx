@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // Use local backend during development and Vercel backend during production
 const API_BASE = import.meta.env.PROD 
-  ? 'https://hydra-flows-ai-ffe5.vercel.app' 
+  ? 'https://hydra-flows-ai-mppw.vercel.app' 
   : 'http://localhost:3001';
 const sectors = [
   { value: 'Apartment', label: 'Apartment / Villa', icon: '🏢' },
