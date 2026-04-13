@@ -29,4 +29,7 @@ Thumbs.db
 
 # Other
 .env
+.env*
+hydrahaas-backend/node_modules/
+hydrahaas-backend/.env
 .gemini/
