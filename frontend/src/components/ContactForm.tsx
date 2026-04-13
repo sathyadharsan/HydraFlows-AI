@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Send, Phone, Mail, MapPin, CheckCircle2, ChevronRight, ChevronLeft, Building2, User, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8080';
-
+// Use local backend during development and Vercel backend during production
+const API_BASE = import.meta.env.PROD 
+  ? 'https://hydra-flows-ai-ffe5.vercel.app' 
+  : 'http://localhost:3001';
 const sectors = [
   { value: 'Apartment', label: 'Apartment / Villa', icon: '🏢' },
   { value: 'Hospital', label: 'Hospital / Healthcare', icon: '🏥' },
@@ -31,14 +33,26 @@ const ContactForm: React.FC = () => {
 
   const handleSubmit = async () => {
     setStatus('loading');
+    console.log('[ContactForm] Submitting to:', `${API_BASE}/api/contact/submit`);
     try {
       const res = await fetch(`${API_BASE}/api/contact/submit`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-      setStatus(res.ok ? 'success' : 'error');
-    } catch {
-      setTimeout(() => setStatus('success'), 1200);
+      
+      const data = await res.json();
+      console.log('[ContactForm] Response:', data);
+      
+      if (res.ok && data.success) {
+        setStatus('success');
+      } else {
+        console.error('[ContactForm] Server error:', data.error);
+        setStatus('error');
+      }
+    } catch (err) {
+      console.error('[ContactForm] Connection error:', err);
+      setStatus('error');
     }
   };
 

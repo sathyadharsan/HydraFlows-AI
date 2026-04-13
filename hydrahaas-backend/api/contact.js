@@ -54,7 +54,8 @@ module.exports = async (req, res) => {
     return res.status(200).json({ success: true, message: 'Lead saved' });
 
   } catch (error) {
-    console.error(`[Contact API] Error processing contact submission:`, error);
-    return res.status(500).json({ success: false, error: 'Server configuration or database error' });
+    console.error(`[Contact API] CRITICAL ERROR:`, error.message);
+    if (error.code) console.error(`[Contact API] Error Code:`, error.code);
+    return res.status(500).json({ success: false, error: `Database Error: ${error.message}` });
   }
 };
