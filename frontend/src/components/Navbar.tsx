@@ -6,9 +6,7 @@ const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -23,25 +21,26 @@ const Navbar: React.FC = () => {
           <span className="text-2xl font-bold tracking-tight">HydraFlows <span className="text-primary">AI</span></span>
         </div>
 
-        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
           <a href="#home" className="hover:text-primary font-medium">Home</a>
           <a href="#solutions" className="hover:text-primary font-medium">Solutions</a>
+          <a href="#offerings" className="hover:text-primary font-medium">Offerings</a>
+          <a href="#verticals" className="hover:text-primary font-medium">Verticals</a>
           <a href="#about" className="hover:text-primary font-medium">About</a>
           <a href="#contact" className="btn btn-primary flex items-center justify-center">Book Demo</a>
         </div>
 
-        {/* Mobile Toggle */}
         <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-secondary/95 backdrop-blur-xl border-t border-border p-6 flex flex-col gap-6 animate-fade">
           <a href="#home" onClick={() => setIsOpen(false)}>Home</a>
           <a href="#solutions" onClick={() => setIsOpen(false)}>Solutions</a>
+          <a href="#offerings" onClick={() => setIsOpen(false)}>Offerings</a>
+          <a href="#verticals" onClick={() => setIsOpen(false)}>Verticals</a>
           <a href="#about" onClick={() => setIsOpen(false)}>About</a>
           <a href="#contact" className="btn btn-primary w-fit" onClick={() => setIsOpen(false)}>Book Demo</a>
         </div>

@@ -44,17 +44,17 @@ const Hero: React.FC = () => {
               </a>
             </div>
 
-            {/* Trust Badges Box */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 border border-border/60 rounded-xl bg-white/5 w-full mt-10 backdrop-blur-sm">
-              <div className="flex items-center gap-3 justify-center">
+            {/* Trust Badges */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-10 border-t border-border w-full">
+              <div className="flex items-center gap-3 justify-center lg:justify-start">
                 <Leaf className="text-primary" size={20} />
                 <span className="text-xs font-bold uppercase tracking-widest text-muted">100% Green</span>
               </div>
-              <div className="flex items-center gap-3 justify-center">
+              <div className="flex items-center gap-3 justify-center lg:justify-start">
                 <Zap className="text-primary" size={20} />
                 <span className="text-xs font-bold uppercase tracking-widest text-muted">AI Managed</span>
               </div>
-              <div className="flex items-center gap-3 justify-center">
+              <div className="flex items-center gap-3 justify-center lg:justify-start">
                 <ShieldCheck className="text-primary" size={20} />
                 <span className="text-xs font-bold uppercase tracking-widest text-muted">Zero Capex</span>
               </div>
@@ -81,7 +81,7 @@ const Hero: React.FC = () => {
               </div>
 
               {/* Floating Performance Indicator */}
-              <div className="absolute -bottom-8 -right-8 bg-secondary/80 backdrop-blur-xl border border-border p-6 rounded-2xl shadow-xl animate-fade hidden sm:block">
+              <div className="absolute -bottom-6 -left-6 md:-left-10 bg-secondary/80 backdrop-blur-xl border border-border p-6 rounded-2xl shadow-xl animate-fade hidden sm:block">
                 <div className="text-primary font-bold text-3xl mb-1">35%</div>
                 <div className="text-xs text-muted uppercase tracking-wider font-bold">Cost Efficiency</div>
               </div>

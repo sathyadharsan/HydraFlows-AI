@@ -56,8 +56,8 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Global Impact Stats Box */}
-        <div className="mt-24 p-8 md:p-12 border border-border/60 rounded-2xl bg-white/5 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center backdrop-blur-sm shadow-xl">
+        {/* Global Impact Stats */}
+        <div className="mt-24 pt-16 border-t border-border grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
           {[
             { label: 'Carbon Reduced', value: '500k Tons', icon: <LeafyGreen className="text-primary mb-4" /> },
             { label: 'Uptime SLA', value: '99.99%', icon: <ShieldCheck className="text-primary mb-4" /> },
@@ -70,11 +70,10 @@ const About: React.FC = () => {
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                transition={{ delay: i * 0.1 }}
-               className="flex flex-col items-center"
              >
                 <div className="flex justify-center">{stat.icon}</div>
-                <div className="text-2xl md:text-3xl font-bold mb-1">{stat.value}</div>
-                <div className="text-[10px] md:text-xs text-muted uppercase tracking-widest font-semibold">{stat.label}</div>
+                <div className="text-3xl font-bold mb-1">{stat.value}</div>
+                <div className="text-xs text-muted uppercase tracking-widest font-semibold">{stat.label}</div>
              </motion.div>
           ))}
         </div>
